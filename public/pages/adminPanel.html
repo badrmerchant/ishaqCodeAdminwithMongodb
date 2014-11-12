@@ -38,7 +38,7 @@
                                 <option value="4">Four</option>
                                 <option value="5">Five</option>
                             </select>
-                            <button class="btn btn-success" ng-click="addStd(std)">Add</button>
+                            <button class="btn btn-success" ng-disabled="!std.userName ||!std.password ||!std.fName||!std.lName" ng-click="addStd(std)">Add</button>
                         </form>
                     </div>
                 </div>
@@ -57,7 +57,7 @@
                         <td>{{student.name}}</td>
                         <td>
 
-                            <select ng-model="student.class">
+                            <select ng-model="student.class" ng-change="saveClassChanged($index)">
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
                                 <option value="3">Three</option>
@@ -67,10 +67,9 @@
                         </td>
                     </tr>
                 </table>
-            <button class="btn btn-success" ng-click="saveClassChanged()">Save Data</button>
         </div>
 
-       <button style="margin-top:7px" class="btn btn-primary btn-lg btn-block" ng-click="checkStdList()">Check Students List</button>
+       <button style="margin-top:7px" class="btn btn-primary btn-lg btn-block" ng-click="checkStdListShow()">Check Students List</button>
         <div style="display:none;" id="checkList">
             <div class="panel panel-info">
                 <div class="panel panel-heading">

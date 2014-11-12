@@ -4,7 +4,7 @@
         <div class="panel-title">Tasks</div>
     </div>
 
-    <div class="panel-body" ng-repeat="task in allData[stdArray].tasks">
+    <div class="panel-body" ng-repeat="task in thisStdData.tasks">
         <div>Status: {{task.status}} Ratings:{{task.ratings}}</div>
         <div>Task No {{$index+1}}:{{task.data}}</div>
         <button class="btn btn-info" ng-click="changeStatus($index)">{{task.status}}</button>

@@ -1,17 +1,14 @@
 angular.module('serverApp')
     .controller('stdCtrl',function($scope,$rootScope,$http,$location){
-        $scope.stdArray=$rootScope.user;
-        $scope.allData=$rootScope.allData;
+        $scope.thisStdData=$rootScope.thisStdData;
         $scope.commentOnTask=function(indx,com){
             if(!com){
                 alert('Please Write Something!');
             }
             else{
-                $scope.comObj={comment:com, taskNo:indx,std:$scope.stdArray};
+                $scope.thisStdData.tasks[indx].comments.push({data:com,commentor:$scope.thisStdData.name});
                 $http.post('users/taskComFromStd',$scope.comObj).success(function(datac){
-                    console.log(datac);
-                    $rootScope.allData=datac;
-                    $scope.allData=datac;
+                    console.log(datac)
                 })
                     .error(function(data){
                         alert(data);
@@ -20,13 +17,10 @@ angular.module('serverApp')
             }
         };
         $scope.changeStatus=function(idx){
-            if($scope.allData[$scope.stdArray].tasks[idx].status=='Completed'){
-                $scope.allData[$scope.stdArray].tasks[idx].status='InComplete';
-
-                $http.post('users/changeStatus',$scope.allData).success(function(datac){
-                console.log(datac);
-                $rootScope.allData=datac;
-                $scope.allData=datac;
+            if($scope.thisStdData.tasks[idx].status=='Completed'){
+                $scope.thisStdData.tasks[idx].status='InComplete';
+                $http.post('users/changeStatus',$scope.thisStdData).success(function(datac){
+                alert(datac);
             })
                 .error(function(data){
                     alert(data);
@@ -34,11 +28,9 @@ angular.module('serverApp')
                 })
         }
             else{
-                $scope.allData[$scope.stdArray].tasks[idx].status='Completed';
-                $http.post('users/changeStatus',$scope.allData).success(function(datac){
-                    console.log(datac);
-                    $rootScope.allData=datac;
-                    $scope.allData=datac;
+                $scope.thisStdData.tasks[idx].status='Completed';
+                $http.post('users/changeStatus',$scope.thisStdData).success(function(datac){
+                    alert(datac);
                 })
                     .error(function(data){
                         alert(data);

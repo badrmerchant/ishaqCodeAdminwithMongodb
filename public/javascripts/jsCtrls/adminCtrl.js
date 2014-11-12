@@ -16,9 +16,9 @@ angular.module('serverApp')
         };
             $scope.addStd=function(dataSend){
                     $http.post('users/addStd',dataSend).success(function(data){
-                            alert(data.message);
-                            $rootScope.user.stdData=data.data;
-                            $scope.stdData=data.data;
+                            //alert(data.message);
+                            $rootScope.user.stdData=data;
+                            $scope.stdData=data;
                      })
                         .error(function(data){
                                 alert(data);
@@ -31,17 +31,15 @@ angular.module('serverApp')
                     $scope.addStdForm.style.display='none';
                     $scope.switchClass123.style.display='block';
             };
-            $scope.checkStdList=function(){
+            $scope.checkStdListShow=function(){
                     $scope.giveTaskList.style.display='none';
                     $scope.showStd.style.display='block';
                     $scope.addStdForm.style.display='none';
                     $scope.switchClass123.style.display='none';
             };
-            $scope.saveClassChanged=function(){
-                    $http.post('users/switchClass',$scope.stdData).success(function(data){
-                            alert('Changes Saved');
-                            $rootScope.user.stdData=data;
-                            $scope.stdData=data;
+            $scope.saveClassChanged=function(idx){
+               $http.post('users/switchClass',$scope.stdData[idx]).success(function(data){
+                            alert(data);
                     })
                     .error(function(data){
                              alert(data);
@@ -64,12 +62,10 @@ angular.module('serverApp')
              alert('Please Write Something!');
           }
             else{
-                $scope.comObj={comment:com, taskNo:indx,std:$rootScope.giveTaskToThis};
-            $http.post('users/taskComFromAdmin',$scope.comObj).success(function(datac){
+                $scope.stdData[$rootScope.giveTaskToThis].tasks[indx].comments.push({data:com,commentor:'Admin'});
+            $http.post('users/taskComFromAdmin',$scope.stdData[$rootScope.giveTaskToThis]).success(function(datac){
                 console.log(datac);
-                  $rootScope.user.stdData=datac;
-                  $scope.stdData=datac;
-              })
+               })
                   .error(function(data){
                       alert(data);
                       console.log(data);
@@ -81,22 +77,19 @@ angular.module('serverApp')
                 alert('Please Write Something!');
             }
             else{
-                $scope.taskObj={task:taskData,std:$rootScope.giveTaskToThis};
-                $http.post('users/giveTask',$scope.taskObj).success(function(datat){
-                    console.log(datat);
-                    $rootScope.user.stdData=datat;
-                    $scope.stdData=datat;
-                })
-                    .error(function(data){
-                        alert(data);
-                        console.log(data);
-                    })
+               $scope.stdData[$rootScope.giveTaskToThis].tasks.push({status:"InComplete",ratings:0,data:taskData,comments:[]});
+                $http.post('users/giveTask',$scope.stdData[$rootScope.giveTaskToThis]).success(function(datat){
+                        alert(datat)
+                        })
+                        .error(function(data){
+                            alert(data);
+                            console.log(data);
+                        })
             }
         };
         $scope.getRatings=function(){
-            $http.post('users/getRatings',$rootScope.user.stdData).success(function(datat){
-                $rootScope.user.stdData=datat;
-                $scope.stdData=datat;
+            $http.post('users/getRatings',$scope.stdData[$rootScope.giveTaskToThis]).success(function(datat){
+                alert(datat);
             })
                 .error(function(data){
                     alert(data);

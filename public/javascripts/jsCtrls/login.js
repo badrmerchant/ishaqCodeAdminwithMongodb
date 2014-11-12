@@ -2,10 +2,14 @@ angular.module('serverApp')
 .controller("loginCtrl",function($scope,$rootScope,$http,$location){
         $scope.login = function(user){
             $http.post('users/loginStd',user).success(function(data){
-                $rootScope.allData=data.allData;
-                $rootScope.user = data.user;
-                alert(data.message);
-                $location.path('/studentHome');
+                if(data ==false){
+                        alert("Oops we can't find your Record :(")
+                }
+                else{
+                    $rootScope.thisStdData = data[0];
+                    $location.path('/studentHome');
+                }
+
             })
                 .error(function(data){
                     console.log(user);
