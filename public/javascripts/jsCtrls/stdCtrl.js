@@ -1,0 +1,52 @@
+angular.module('serverApp')
+    .controller('stdCtrl',function($scope,$rootScope,$http,$location){
+        $scope.stdArray=$rootScope.user;
+        $scope.allData=$rootScope.allData;
+        $scope.commentOnTask=function(indx,com){
+            if(!com){
+                alert('Please Write Something!');
+            }
+            else{
+                $scope.comObj={comment:com, taskNo:indx,std:$scope.stdArray};
+                $http.post('users/taskComFromStd',$scope.comObj).success(function(datac){
+                    console.log(datac);
+                    $rootScope.allData=datac;
+                    $scope.allData=datac;
+                })
+                    .error(function(data){
+                        alert(data);
+                        console.log(data);
+                    })
+            }
+        };
+        $scope.changeStatus=function(idx){
+            if($scope.allData[$scope.stdArray].tasks[idx].status=='Completed'){
+                $scope.allData[$scope.stdArray].tasks[idx].status='InComplete';
+
+                $http.post('users/changeStatus',$scope.allData).success(function(datac){
+                console.log(datac);
+                $rootScope.allData=datac;
+                $scope.allData=datac;
+            })
+                .error(function(data){
+                    alert(data);
+                    console.log(data);
+                })
+        }
+            else{
+                $scope.allData[$scope.stdArray].tasks[idx].status='Completed';
+                $http.post('users/changeStatus',$scope.allData).success(function(datac){
+                    console.log(datac);
+                    $rootScope.allData=datac;
+                    $scope.allData=datac;
+                })
+                    .error(function(data){
+                        alert(data);
+                        console.log(data);
+                    })
+            }
+        };
+        $scope.logout=function(){
+            $location.path('/')
+        };
+    });
